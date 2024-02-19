@@ -31,4 +31,14 @@ public class Produto {
 	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
 	}
+
+	public void removerEstoque(BigDecimal quantidade) {
+		if (quantidade.compareTo(BigDecimal.ZERO) < 0) {
+			throw new UnsupportedOperationException("Valor inválido");
+		} else if (this.quantidade.subtract(quantidade).compareTo(BigDecimal.ZERO) < 0) {
+			throw new UnsupportedOperationException("Estoque insuficiente");
+		} else {
+			this.quantidade = this.quantidade.subtract(quantidade);
+		}
+	}
 }
