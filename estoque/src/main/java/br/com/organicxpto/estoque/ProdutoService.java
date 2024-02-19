@@ -21,4 +21,12 @@ public class ProdutoService {
     public List<Produto> getAll() {
         return this.fakeDb;
     }
+
+    public void removerEstoque(Long idProduto, BigDecimal quantidade) {
+        this.fakeDb.stream()
+                .filter(p -> p.getId().equals(idProduto))
+                .findFirst()
+                .orElseThrow()
+                .removerEstoque(quantidade);
+    }
 }
