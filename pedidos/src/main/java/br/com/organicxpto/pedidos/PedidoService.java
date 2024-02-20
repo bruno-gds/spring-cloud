@@ -17,11 +17,24 @@ public class PedidoService {
 
     private List<Pedido> fakeDb = new ArrayList<>();
 
+    private final EstoquePedidoProducer estoquePedidoProducer;
+
+    public PedidoService(EstoquePedidoProducer estoquePedidoProducer) {
+        this.estoquePedidoProducer = estoquePedidoProducer;
+    }
+
     public List<Pedido> getAll() {
         return this.fakeDb;
     }
 
     public void save(Pedido pedido) {
-        this.fakeDb.add(pedido);
+        try {
+            pedido.getItens().forEach(p -> this.estoquePedidoProducer.removerEstoque(
+                    new RemoverEstoqueRequest(p.getIdProduct(), p.getQuantidade())
+            ));
+            this.fakeDb.add(pedido);
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("Fora de estoque");
+        }
     }
 }
